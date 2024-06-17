@@ -46,3 +46,6 @@ export function useDevice(data) {
 export function dirInfo(data) {
     return base.get('/webdav/dir', { params: data })
 }
+export function openFile(data) {
+    return base.post('/webdav/file/play', data)
+}

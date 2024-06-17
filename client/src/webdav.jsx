@@ -1,5 +1,6 @@
 import {
-    dirInfo
+    dirInfo,
+    openFile
 } from './api.js'
 import { CascaderView, Toast } from 'antd-mobile'
 import {
@@ -20,6 +21,15 @@ function genOptionLabel(i) {
     )
 }
 
+function allowClick(i) {
+    let list = [
+        'audio/mpeg',
+        'audio/flac',
+        'audio/ape'
+    ]
+    return i.type === 'directory' || list.includes(i.mime)
+}
+
 function genOptions(origin, keyPath, list) {
     if (!origin.length || !keyPath) {
         return list.map(i => {
@@ -27,7 +37,8 @@ function genOptions(origin, keyPath, list) {
                 label: genOptionLabel(i),
                 value: i.filename,
                 children: [],
-                disabled: i.type !== 'directory'
+                disabled: !allowClick(i),
+                type: i.type
             }
         })
     }
@@ -42,11 +53,15 @@ function genOptions(origin, keyPath, list) {
             label: genOptionLabel(i),
             value: i.filename,
             children: [],
-            disabled: i.type !== 'directory'
+            disabled: !allowClick(i),
+            type: i.type
         }
     })
     return origin
 }
+
+
+
 export default function Webdav(props) {
     let [options, setOptions] = useState([])
     let [value, setValue] = useState([])
@@ -66,6 +81,22 @@ export default function Webdav(props) {
             Toast.clear()
         })
     }, [currentPath.current])
+    function playMusic(path) {
+        Toast.show({
+            icon: 'loading',
+            content: '加载中…',
+            duration: 0
+        })
+        openFile({
+            path
+        }).then(res => {
+            console.log(res)
+            Toast.show({
+                icon: 'success',
+                content: '播放成功'
+            })
+        })
+    }
     return (
         <div>
             <h4>网盘音乐</h4>
@@ -76,9 +107,14 @@ export default function Webdav(props) {
                     options={options}
                     value={value}
                     onChange={(val, extend) => {
-                        setValue(val)
+                       
                         currentPath.current = val[val.length - 1]
-                        console.log('onChange', val, extend.items)
+                        let item = extend.items[extend.items.length - 1]
+                        if(item.type === 'file') {
+                            playMusic(item.value)
+                        } else {
+                            setValue(val)
+                        }
                     }}
                 />
             </div>
