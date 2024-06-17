@@ -9,7 +9,8 @@ import {
 } from 'antd-mobile'
 import {
   getDevice,
-  sendText
+  sendText,
+  useDevice
 } from './api.js'
 import Webdav from './webdav.jsx'
 function App() {
@@ -33,12 +34,26 @@ function App() {
       })
     })
   }
+  function onDeviceChange(key) {
+    let d = deviceList[key]
+    console.log(d)
+    useDevice({
+      deviceName: d.name
+    }).then(res => {
+      Toast.show({
+        icon: 'success',
+        content: '切换成功'
+      })
+    
+    })
+  }
   return (
     <div>
       <h4>设备列表</h4>
       <CapsuleTabs
         activeKey={activeKey}
         onChange={(key) => {
+          onDeviceChange(key)
           setActiveKey(key)
         }}
       >
@@ -74,7 +89,7 @@ function App() {
           />
         </Form.Item>
       </Form>
-      <Webdav />
+      {/* <Webdav /> */}
       <SafeArea position='bottom' />
     </div>
   )

@@ -37,7 +37,7 @@ export default {
             return
         }
         try {
-            await xiaoai.client.useDevice(deviceName)
+            await xiaoai.switchDevice(deviceName)
             ctx.success()
         } catch (error) {
             console.error('切换设备失败', error)

@@ -1,6 +1,8 @@
 const sessionPath = './session'
 import xiaoai from 'xiaoai-tts'
 import fs from 'fs'
+// LATEST_ASK_API = "https://userprofile.mina.mi.com/device_profile/v2/conversation?source=dialogu&hardware={hardware}&timestamp={timestamp}&limit=2"
+
 export default {
     userinfo: {
         user: null,
@@ -14,9 +16,10 @@ export default {
             const Session = fs.readFileSync(sessionPath,
                 { encoding: 'utf8' }
             )
-    
+            console.log('存在session')
             // 通过 Session 登录
             this.client = new xiaoai(JSON.parse(Session))
+            await this.client.connect()
         } catch (e) {
             this.client = new xiaoai(this.userinfo.user, this.userinfo.password)
     
