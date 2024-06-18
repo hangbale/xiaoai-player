@@ -1,5 +1,4 @@
 import webdav from "../webdav.js"
-import axios from 'axios'
 import xiaoai from "../xiaoai.js"
 export default {
     dirInfo: async function (ctx) {
