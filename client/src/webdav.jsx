@@ -65,22 +65,29 @@ function genOptions(origin, keyPath, list) {
 export default function Webdav(props) {
     let [options, setOptions] = useState([])
     let [value, setValue] = useState([])
-    let currentPath = useRef('/')
+    let [currentPath, setCurrentPath] = useState('/')
+    let currentType = useRef('directory')
+    console.log('renddddd')
     useEffect(function () {
+        console.log('innnn')
+        console.log(currentPath)
+        if(currentType.current !== 'directory') {
+            return
+        }
         Toast.show({
             icon: 'loading',
             content: '加载中…',
             duration: 0
         })
         dirInfo({
-            path: currentPath.current
+            path: currentPath
         }).then(res => {
             console.log(res)
             setOptions(genOptions(options.slice(), value, res))
         }).finally(function () {
             Toast.clear()
         })
-    }, [currentPath.current])
+    }, [currentPath])
     function playMusic(path) {
         Toast.show({
             icon: 'loading',
@@ -91,6 +98,7 @@ export default function Webdav(props) {
             path
         }).then(res => {
             console.log(res)
+            props.onFile(path)
             Toast.show({
                 icon: 'success',
                 content: '播放成功'
@@ -99,7 +107,7 @@ export default function Webdav(props) {
     }
     return (
         <div>
-            <h4>网盘音乐</h4>
+            <h4>播放音乐</h4>
             <div
             >
                 <CascaderView
@@ -108,9 +116,11 @@ export default function Webdav(props) {
                     value={value}
                     onChange={(val, extend) => {
                        
-                        currentPath.current = val[val.length - 1]
+                        setCurrentPath(val[val.length - 1])
                         let item = extend.items[extend.items.length - 1]
+                        currentType.current = item.type
                         if(item.type === 'file') {
+                            console.log('fffff')
                             playMusic(item.value)
                         } else {
                             setValue(val)

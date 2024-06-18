@@ -49,3 +49,9 @@ export function dirInfo(data) {
 export function openFile(data) {
     return base.post('/webdav/file/play', data)
 }
+export function playControl(data) {
+    return base.post('/play/control', data)
+}
+export function getStatus(data) {
+    return base.get('/device/status', data)
+}

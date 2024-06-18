@@ -7,5 +7,7 @@ router.post('/sendtext', xiaoai.sendText);
 router.post('/devices/use', xiaoai.useDevice);
 router.get('/webdav/dir', webdav.dirInfo);
 router.post('/webdav/file/play', webdav.openFile);
+router.post('/play/control', xiaoai.playControl);
+router.get('/device/status', xiaoai.getStaus);
 
 export default router

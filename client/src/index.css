@@ -1,0 +1,31 @@
+:root:root {
+    --adm-color-primary: #4CAF50;
+}
+.custom-tabbar .adm-tab-bar-item {
+    align-items: unset !important;
+}
+.bottom-bar {
+    position: fixed;
+    bottom: 0;
+    z-index: 100;
+    left: 0;
+    right: 0;
+    background-color: #fff;
+    border-top: 1px solid #e0e0e0;
+    display: flex;
+    padding: 16px;
+    padding-bottom: calc(constant(safe-area-inset-bottom) + 16px);
+    padding-bottom: calc(env(safe-area-inset-bottom) + 16px);
+    align-items: center;
+}
+.bottom-bar .song-title {
+    margin: 0 16px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    flex: 1;
+}
+.bottom-bar .icon-volume {
+    margin-right: 0;
+    margin-left: auto;
+}

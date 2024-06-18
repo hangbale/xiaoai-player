@@ -23,10 +23,12 @@ export default {
             return
         }
         try {
-            await axios.post(`${process.env.MUSIC_SERVER}/file/download`, { path })
-            let onlineMusicPath = `${process.env.MUSIC_SERVER}/${path.split('/').pop()}`
+            // await axios.post(`${process.env.MUSIC_SERVER}/file/download`, { path })
+            let onlineMusicPath = `${process.env.MUSIC_SERVER}${path}`
             console.log('onlineMusicPath', onlineMusicPath)
-            // xiaoai.client.playUrl(onlineMusicPath)
+            xiaoai.client.playUrl(onlineMusicPath).then(res => {
+                console.log('res', res)
+            })
             ctx.success({
                 path
             })
