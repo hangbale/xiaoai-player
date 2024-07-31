@@ -41,6 +41,7 @@ export default {
         this.minaClient = null
     },
     doAction: async function(siid, aiid, params) {
+        console.log(this.clinet)
         return this.client.doAction(siid, aiid, params)
     },
     setProperty: async function(siid, piid, value) {
@@ -70,7 +71,7 @@ export default {
     },
     speakerPlayOnlineMusic: async function(url) {
         if(!this.minaClient) {
-            this.initMina()
+            await this.initMina()
         }
         this.minaClient.play({
             url

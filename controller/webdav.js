@@ -1,5 +1,5 @@
 import webdav from "../webdav.js"
-import xiaoai from "../xiaoai.js"
+import xiaoai from "../miiot.js"
 export default {
     dirInfo: async function (ctx) {
         let { path } = ctx.query
