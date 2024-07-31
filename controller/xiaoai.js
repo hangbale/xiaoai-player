@@ -1,19 +1,13 @@
-import xiaoai from "../xiaoai.js"
+import xiaoai from "../miiot.js"
 export default {
     deviceList: async function (ctx) {
         try {
-            await xiaoai.client.test()
-        } catch (error) {
-            await xiaoai.auth()
-        }
-        try {
-            let d = await xiaoai.client.getDevice()
+            let d = await xiaoai.getXiaoAiSpeaker()
             ctx.success(d.map((i, j) => {
                 return {
                     name: i.name,
-                    alias: i.alias,
-                    presence: i.presence,
-                    active: j === 0
+                    did: i.did,
+                    active: xiaoai.currentDid === i.did
                 }
             }))
         } catch (error) {
@@ -28,7 +22,7 @@ export default {
             return
         }
         try {
-            await xiaoai.client.say(text)
+            await xiaoai.speakerSayText(text)
             ctx.success()
         } catch (error) {
             console.error('发送消息失败', error)
@@ -36,13 +30,13 @@ export default {
         }
     },
     useDevice: async function (ctx) {
-        let { deviceName } = ctx.request.body
-        if (!deviceName) {
+        let { did } = ctx.request.body
+        if (!did) {
             ctx.fail('参数错误')
             return
         }
         try {
-            await xiaoai.switchDevice(deviceName)
+            await xiaoai.switchDevice(did)
             ctx.success()
         } catch (error) {
             console.error('切换设备失败', error)
@@ -50,18 +44,16 @@ export default {
         }
     },
     playControl: async function (ctx) {
-        let { type } = ctx.request.body
+        let { type, value } = ctx.request.body
         if (!type) {
             ctx.fail('参数错误')
             return
         }
         try {
-            if(type === 'play') {
-                await xiaoai.client.play()
-            } else if(type === 'pause') {
-                await xiaoai.client.pause()
-            } else if(type === 'volume') {
-                await xiaoai.client.setVolume(ctx.request.body.value)
+            if(type === 'volume') {
+                await xiaoai.speakerVolumeControl(value)
+            } else {
+                await xiaoai.speakerPlayControl(type)
             }
             ctx.success()
         } catch (error) {
@@ -71,8 +63,7 @@ export default {
     },
     getStaus: async function (ctx) {
         try {
-            let status = await xiaoai.client.getStatus()
-            console.log(status)
+            let status = await xiaoai.getSpeakerPlayStatus()
             ctx.success(status)
         } catch (error) {
             console.error('获取状态失败', error)

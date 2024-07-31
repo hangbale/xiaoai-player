@@ -17,13 +17,14 @@ import {
 import Webdav from './webdav.jsx'
 import Control from './control.jsx'
 function App() {
-  let [activeKey, setActiveKey] = useState('0')
+  let [activeKey, setActiveKey] = useState('')
   let [deviceList, setDeviceList] = useState([])
   let [currentFile, setCurrentFile] = useState('')
   useEffect(function () {
     getDevice().then(function (data) {
       if(data) {
         setDeviceList(data)
+        setActiveKey('' + data.findIndex(i => i.active))
       }
     })
     getStatus().then(function (data) {
@@ -31,7 +32,6 @@ function App() {
     })
   }, [])
   function submitForm(v) {
-    console.log(v)
     sendText({
       text: v.text
     }).then(res => {
@@ -43,9 +43,8 @@ function App() {
   }
   function onDeviceChange(key) {
     let d = deviceList[key]
-    console.log(d)
     useDevice({
-      deviceName: d.name
+      did: d.did
     }).then(res => {
       Toast.show({
         icon: 'success',
@@ -55,7 +54,6 @@ function App() {
     })
   }
   function controlChange(e) {
-    console.log(e)
     playControl(e).then(res => {
       Toast.show({
         icon: 'success',

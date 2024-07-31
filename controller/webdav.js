@@ -25,9 +25,7 @@ export default {
             // await axios.post(`${process.env.MUSIC_SERVER}/file/download`, { path })
             let onlineMusicPath = `${process.env.MUSIC_SERVER}${path}`
             console.log('onlineMusicPath', onlineMusicPath)
-            xiaoai.client.playUrl(encodeURI(onlineMusicPath)).then(res => {
-                console.log('res', res)
-            })
+            await xiaoai.speakerPlayOnlineMusic(encodeURI(onlineMusicPath))
             ctx.success({
                 path
             })
